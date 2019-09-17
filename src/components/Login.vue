@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   data () {
     return {
@@ -28,7 +27,7 @@ export default {
       rules: {
         username: [
           { required: true, message: '请输入用户名称', trigger: ['blur', 'change'] },
-          { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: ['blur', 'change'] }
+          { min: 3, max: 12, message: '长度在 3 到 12 个字符', trigger: ['blur', 'change'] }
         ],
         password: [
           { required: true, message: '请输入用户密码', trigger: ['blur', 'change'] },
@@ -38,28 +37,30 @@ export default {
     }
   },
   methods: {
-    login () {
-      this.$refs.form.validate(valid => {
-        if (!valid) return false
-        axios.post('http://localhost:8888/api/private/v1/login', this.form).then(res => {
-          const { meta, data } = res.data
-          if (meta.status === 200) {
-            localStorage.setItem('token', data.token)
-            this.$router.push('/home')
-            this.$message({
-              type: 'success',
-              message: meta.msg,
-              duration: 1000
-            })
-          } else {
-            this.$message({
-              type: 'error',
-              message: meta.msg,
-              duration: 1000
-            })
-          }
-        })
-      })
+    async login () {
+      try {
+        await this.$refs.form.validate()
+        const res = await this.$axios.post('login', this.form)
+        const { meta, data } = res
+        if (meta.status === 200) {
+          localStorage.setItem('token', data.token)
+          this.$router.push('/home')
+          this.$message({
+            type: 'success',
+            message: meta.msg,
+            duration: 1000
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: meta.msg,
+            duration: 1000
+          })
+        }
+      } catch (e) {
+        console.log(e)
+        return false
+      }
     },
     resetForm () {
       this.$refs.form.resetForm()
