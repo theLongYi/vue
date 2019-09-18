@@ -6,6 +6,7 @@ import Users from './components/users/Users.vue'
 import Roles from './components/rights/Roles.vue'
 import Rights from './components/rights/Rights.vue'
 import Goods from './components/products/Goods.vue'
+import GoodsAdd from './components/products/GoodsAdd.vue'
 import Params from './components/products/Params.vue'
 import Categories from './components/products/Categories.vue'
 import Orders from './components/orders/Orders.vue'
@@ -42,6 +43,10 @@ const router = new VueRouter({
         {
           path: '/Goods',
           component: Goods
+        },
+        {
+          path: '/goods-add',
+          component: GoodsAdd
         },
         {
           path: '/Params',
